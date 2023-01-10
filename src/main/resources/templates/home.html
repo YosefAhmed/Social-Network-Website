@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: azure;
+        }
+        input[type=text], input[type=password] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #227bcf;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: 2px solid #227bcf;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 5px;
+
+        }
+        button:hover {
+            opacity: 0.8;
+        }
+        .wall-modal{
+            width: 70%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .post-modal{
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            transition: 0.3s;
+            background-color: white;
+            width: 70%;
+            border-radius: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 5%;
+            
+        }
+        .container {
+            padding: 3% 3%;
+        }
+        .post-textArea{
+            width: 80%;
+            padding: 12px 20px;
+            display: inline-block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            border-radius: 10px;
+        }
+        .postAccount-panel{
+            display:flex; 
+            flex-direction: row; 
+            justify-content: flex-start; 
+            align-items: center;
+        }
+        .postAccount-panel-data{
+            font-size: small;
+            display:flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: baseline;
+            margin-left: 1%;
+        }
+        .postContent-panel{
+
+        }
+        .postInteractions-panel{
+            display:flex; 
+            flex-direction: row; 
+            justify-content: center; 
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="wall-modal" id="wallModal">
+        <div class="post-modal">
+            <div class="container">
+                    <img src="../static/images/man-avatar.png" style="width: 10%; border-radius: 50%;">
+                    <textarea id="postContent" class="post-textArea" name="postTxt" placeholder="Write a post.."></textarea>
+                    <button type="submit" onclick="post(document.getElementById('postContent').value)">Post</button>
+            </div>
+        </div>
+        <hr style="flex-grow: 1;margin-bottom: auto; background-color: #ccc; width: 65%;">
+    </div>
+    <script>
+        function post(postContent){
+            var postElement = `
+                <div class="post-modal">
+                    <div class="container">
+                        <div class="postAccount-panel">
+                            <img src="../static/images/man-avatar.png" style="width: 10%; border-radius: 50%;">
+                            <div class="postAccount-panel-data">
+                                <strong id="nameText">Yousef Ahmed</strong>
+                                <small id="postDateText">10/01/2023</small>
+                            </div>
+                        </div>
+                        <div class="postContent-panel">
+                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                        </div>
+                        <div>
+                        <div class="postInteractions-panel">
+                            <button id="commentButton" type="submit" style="margin-right: 1%; width: 20%;" >comment</button>
+                            <textarea id="commentContent" class="post-textArea" name="commentTxt" placeholder="Write a comment.."></textarea>
+                            <button id="likeButton" type="submit" style="margin-left: 2%; width: 25%;" onclick="like(this, this.parentNode.parentNode)">Like</button>
+                        </div>
+                        <small id="numOfComments" style="color: gray;">0</small>
+                        <small style="color: gray;"> comments</small>
+                        <small id="numOfLikes" style="color: gray;">0</small>
+                        <small style="color: gray;"> likes</small>
+                    </div>
+                    </div>
+                </div>
+            `;
+            var element = document.createElement('div');
+            element.innerHTML = postElement;
+            document.getElementById('wallModal').appendChild(element);
+        }
+        function like(element, parent){
+            let numOfLikes = Number(parent.querySelector('#numOfLikes').innerHTML);
+            if(element.innerHTML == "Like"){
+                element.innerHTML = "Liked";
+                element.style.backgroundColor = "white";
+                element.style.border = "2px solid #227bcf";
+                element.style.color = "#227bcf";
+                
+                numOfLikes++;
+            }
+            else{
+                element.innerHTML = "Like";
+                element.style.backgroundColor = "#227bcf";
+                element.style.border = "border: 0px";
+                element.style.color = "white";
+                numOfLikes--;
+            }
+            parent.querySelector('#numOfLikes').innerHTML = numOfLikes;
+        }
+    </script>
+</body>
+</html>
