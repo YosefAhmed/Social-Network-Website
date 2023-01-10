@@ -4,6 +4,6 @@ this is a personal project in which I applied what I have learned in spring fram
 ### Working Progress:
 - [x] Build main structure of the project.
 - [x] Build the database using Jpa.
-- [ ] Build UI pages.
+- [x] Build UI pages.
 - [ ] Apply authentication & authorization using JWT.
 - [ ] Create entry points.
