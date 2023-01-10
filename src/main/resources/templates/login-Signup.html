@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account</title>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: azure;
+        }
+        input[type=text], input[type=password] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #227bcf;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            opacity: 0.8;
+        }
+        .signup-button {
+            background-color: #22cf79;
+            color: white;
+            padding: 14px 20px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+
+        }
+        .signup-button:hover{
+            opacity: 0.8;
+        }
+        .container {
+            padding: 16px;
+        }
+        span.psw {
+            float: right;
+            padding-top: 16px;
+        }
+        .login-modal {
+            display: contents;
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            padding-top: 60px;
+            box-shadow: inset;
+        }
+        .loginModal-content {
+            background-color: #fefefe;
+            margin: 5% auto 15% auto; 
+            width: 50%;
+            box-shadow: #000;
+            position: relative;
+        }
+        .signup-modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            padding-top: 60px;
+        }
+        .signupModal-content {
+            background-color: #fefefe;
+            margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+            border: 1px solid #888;
+            width: 50%; /* Could be more or less, depending on screen size */
+        }
+        /* The Close Button (x) */
+        .close {
+            margin: 0% 0% 0% 95%;
+            color: #000;
+            font-size: 35px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: red;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-modal" id="loginModalId">
+        <div class="loginModal-content">
+            <form >
+                <div class="container">
+                    <label for="email"><b>Email</b></label>
+                    <input type="text" placeholder="Enter your email" name="email">
+                    <label for="psw"><b>Password</b></label>
+                    <input type="password" placeholder="Enter your password" name="psw">
+                    <button type="submit">Login</button>
+                    <label>
+                        <input type="checkbox" checked="checked" name="remember">Remember
+                    </label>
+                </div>
+            </form>
+            <button class="signup-button"
+            onclick="document.getElementById('signupModalId').style.display='block'"> Create Account</button>
+        </div>
+    </div>
+    <div class="signup-modal" id="signupModalId">
+        <form class="signupModal-content">
+            <div class="container">
+                <span onclick="document.getElementById('signupModalId').style.display='none'"
+                    class="close" title="Close Modal">&times;</span>
+                <label for="name"><b>Name</b></label>
+                <input type="text" placeholder="Enter your name" name="name" required>
+                <label for="email"><b>Email</b></label>
+                <input type="text" placeholder="Enter your email" name="email" required>
+                <label for="psw"><b>Password</b></label>
+                <input type="password" placeholder="Enter your password" name="psw" required>
+                <button type="submit">Create Account</button>
+            </div>
+        </form>
+    </div>
+    <script>
+        var signupModal = document.getElementById('signupModalId');
+        window.onclick = function(event){
+            if(event.target == signupModal){
+                signupModal.style.display="none";
+            }
+        }
+    </script>
+</body>
+</html>
