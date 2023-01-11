@@ -5,5 +5,5 @@ this is a personal project in which I applied what I have learned in spring fram
 - [x] Build main structure of the project.
 - [x] Build the database using Jpa.
 - [x] Build UI pages.
-- [ ] Apply authentication & authorization using JWT.
+- [x] Apply authentication & authorization using JWT.
 - [ ] Create entry points.

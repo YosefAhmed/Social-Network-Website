@@ -12,6 +12,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @GetMapping("sayHello")
+    public String sayHello(){
+        return "Hello from secured end point";
+    }
+
     public String createAccount(String name,
                                 String email,
                                 String password){
