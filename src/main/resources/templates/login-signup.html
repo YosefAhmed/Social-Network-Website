@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -101,48 +101,91 @@
             cursor: pointer;
         }
     </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <div class="login-modal" id="loginModalId">
         <div class="loginModal-content">
-            <form >
+            <form onsubmit="return false" id="loginForm">
                 <div class="container">
-                    <label for="email"><b>Email</b></label>
+                    <label><b>Email</b></label>
                     <input type="text" placeholder="Enter your email" name="email">
-                    <label for="psw"><b>Password</b></label>
-                    <input type="password" placeholder="Enter your password" name="psw">
-                    <button type="submit">Login</button>
+                    <label><b>Password</b></label>
+                    <input type="password" placeholder="Enter your password" name="password">
+                    <button type="submit" id="loginBtn" onclick="login(email.value, password.value)">Login</button>
                     <label>
                         <input type="checkbox" checked="checked" name="remember">Remember
                     </label>
                 </div>
             </form>
             <button class="signup-button"
-            onclick="document.getElementById('signupModalId').style.display='block'"> Create Account</button>
+            onclick="showRegisterModal()"> Create Account</button>
         </div>
     </div>
     <div class="signup-modal" id="signupModalId">
         <form class="signupModal-content">
             <div class="container">
-                <span onclick="document.getElementById('signupModalId').style.display='none'"
+                <span onclick="closeRegisterModal()"
                     class="close" title="Close Modal">&times;</span>
-                <label for="name"><b>Name</b></label>
+                <label><b>Name</b></label>
                 <input type="text" placeholder="Enter your name" name="name" required>
-                <label for="email"><b>Email</b></label>
+                <label><b>Email</b></label>
                 <input type="text" placeholder="Enter your email" name="email" required>
-                <label for="psw"><b>Password</b></label>
+                <label><b>Password</b></label>
                 <input type="password" placeholder="Enter your password" name="psw" required>
                 <button type="submit">Create Account</button>
             </div>
         </form>
     </div>
-    <script>
+    <script >
         var signupModal = document.getElementById('signupModalId');
-        window.onclick = function(event){
-            if(event.target == signupModal){
-                signupModal.style.display="none";
-            }
-        }
+window.onclick = function(event){
+    if(event.target == signupModal){
+        closeRegisterModal();
+    }
+}
+var token = "";
+function login(email, password){
+    $.ajax({
+		url: "/authentication/authenticate", 
+		type:'POST', 
+		data: JSON.stringify({ "email": email, "password": password }), 
+		headers: {"Content-Type":"application/json"},
+        success: function(result){ 
+            token = result;
+            alert("success "+token);
+            saveAuthData(token);
+            $.ajax({
+                url: "/home", 
+                type:'GET', 
+                headers: {"Content-Type":"application/json","Authorization":"Bearer "+token},
+                success: function(result){ 
+                    alert("success "+result);                    
+                },
+                error: function(result){ alert("error "+result);}
+		});
+        },
+        error: function(result){ alert("error "+result.statusText);}
+		});
+}
+function register(){
+
+}
+function showRegisterModal(){
+    document.getElementById('signupModalId').style.display='block';
+}
+function closeRegisterModal(){
+    document.getElementById('signupModalId').style.display='none'
+}
+function saveAuthData(token){
+    sessionStorage.setItem('token', token);
+}
+function clearAuthData(){
+    sessionStorage.removeItem("token");
+}
+function getAuthData(){
+    return sessionStorage.getItem("token");
+}
     </script>
 </body>
 </html>
