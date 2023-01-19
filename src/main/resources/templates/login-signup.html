@@ -146,27 +146,45 @@ window.onclick = function(event){
 }
 var token = "";
 function login(email, password){
-    $.ajax({
-		url: "/authentication/authenticate", 
-		type:'POST', 
-		data: JSON.stringify({ "email": email, "password": password }), 
-		headers: {"Content-Type":"application/json"},
-        success: function(result){ 
-            token = result;
-            alert("success "+token);
-            saveAuthData(token);
-            $.ajax({
-                url: "/home", 
-                type:'GET', 
-                headers: {"Content-Type":"application/json","Authorization":"Bearer "+token},
-                success: function(result){ 
-                    alert("success "+result);                    
-                },
-                error: function(result){ alert("error "+result);}
-		});
-        },
-        error: function(result){ alert("error "+result.statusText);}
-		});
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ "email": email, "password": password })
+    };
+    fetch("/login", requestOptions)
+        .then((res) => {
+            if (res.status == 200) {
+                res.text().then(function(value){
+                    saveAuthData(value);
+                });
+                // window.location.reload();
+            } else {
+                throw Error(res.statusText)
+            }
+        })
+        .catch(console.error)
+    // $.ajax({
+	// 	url: "/authentication/authenticate", 
+	// 	type:'POST', 
+	// 	data: JSON.stringify({ "email": email, "password": password }), 
+	// 	headers: {"Content-Type":"application/json"},
+    //     success: function(result){ 
+    //         token = result;
+    //         alert("success "+token);
+    //         saveAuthData(token);
+    //         $.ajax({
+    //             url: "/home", 
+    //             type:'GET', 
+    //             headers: {"Content-Type":"application/json","Authorization":"Bearer "+token},
+    //             success: function(result){ 
+    //                 alert("success "+result);    
+    //                 // window.location.replace("/home");                
+    //             },
+    //             error: function(result){ alert("error "+result);}
+	// 	});
+    //     },
+    //     error: function(result){ alert("error "+result.statusText);}
+	// 	});
 }
 function register(){
 
@@ -177,14 +195,14 @@ function showRegisterModal(){
 function closeRegisterModal(){
     document.getElementById('signupModalId').style.display='none'
 }
-function saveAuthData(token){
-    sessionStorage.setItem('token', token);
+function saveAuthData(data){
+    localStorage.setItem("currentUser", data);
 }
 function clearAuthData(){
-    sessionStorage.removeItem("token");
+    localStorage.removeItem("token");
 }
 function getAuthData(){
-    return sessionStorage.getItem("token");
+    return localStorage.getItem("token");
 }
     </script>
 </body>

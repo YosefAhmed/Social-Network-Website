@@ -73,7 +73,7 @@ public class UserModel implements UserDetails {
     public String toString(){
         String jsonObject =
                 """
-                {'id': %s,'name': %s, 'email': %s, 'password': %s, 'role': %s}
+                {"id": %s,"name": "%s", "email": "%s", "password": "%s", "role": "%s"}
                 """;
         jsonObject = String.format(jsonObject,id, name,email, password, role);
         return jsonObject;

@@ -26,7 +26,7 @@ public class SecurityConfig {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests() // ---------|
-                .requestMatchers("/authentication/**")//------| (white list) these 3 filters means don't authenticate
+                .requestMatchers("/","/register","/login")//------| (white list) these 3 filters means don't authenticate
                 .permitAll()//-----------------------|  the given end points with token.
                 .anyRequest()//----------------------|  and authenticate any another requests.
                 .authenticated()
