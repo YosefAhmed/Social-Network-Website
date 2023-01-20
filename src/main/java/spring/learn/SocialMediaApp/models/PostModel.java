@@ -4,14 +4,16 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 
 @Entity
 @Table(name = "posts")
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
+@Builder
 public class PostModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,23 +21,23 @@ public class PostModel {
     @Column
     private String content;
     @Column
-    private Calendar postDate;
+    private Date postDate;
     @Column
     private int numberOfLikes;
     @Column
     private int numberOfComments;
     @ManyToOne
-    @JoinColumn(name = "publisherId", referencedColumnName = "id")
-    private UserModel publisherId;
+    @JoinColumn(name = "publisher", referencedColumnName = "id")
+    private UserModel publisher;
     @OneToMany
     @JoinTable(name = "postComments",
                 joinColumns = @JoinColumn(name = "postId", referencedColumnName = "id"),
                 inverseJoinColumns = @JoinColumn(name = "commentId", referencedColumnName = "id"))
-    private HashSet<CommentModel> listOfComments;
+    private List<CommentModel> listOfComments;
     @OneToMany
     @JoinTable(name = "postLikes",
             joinColumns = @JoinColumn(name = "postId", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "userId", referencedColumnName = "id"))
-    private HashSet<UserModel> listOfLikes;
+    private List<UserModel> listOfLikes;
 
 }

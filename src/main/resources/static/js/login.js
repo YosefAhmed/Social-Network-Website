@@ -1,17 +1,37 @@
+window.onload = function(){
+  //TODO check if rememberMe is enabled
+
+};
+
+
 var signupModal = document.getElementById('signupModalId');
 window.onclick = function(event){
     if(event.target == signupModal){
         closeRegisterModal();
     }
 }
-function login(email, password){
-    alert(email);
-    alert(password);
-    $http({
-        method: 'POST', 
-        url: '/authentication/authenticate',
-        data: JSON.stringify({ "email": email, "password": password }),
-      });
+
+var token = "";
+function login(email, password, rememberMe){
+    console.log(rememberMe);
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ "email": email, "password": password, "rememberMe": rememberMe})
+    };
+    fetch("/authenticated/login", requestOptions)
+        .then((res) => {
+            if (res.status == 200) {
+                res.text().then(function(value){
+                    saveAuthData(value);
+                });
+                window.location.reload();
+            } else {
+                throw Error(res.statusText)
+            }
+        })
+        .catch(console.error)
+
 }
 function register(){
 
@@ -22,12 +42,12 @@ function showRegisterModal(){
 function closeRegisterModal(){
     document.getElementById('signupModalId').style.display='none'
 }
-function saveAuthData(token){
-    sessionStorage.setItem('token', token);
+function saveAuthData(data){
+    localStorage.setItem("currentUser", data);
 }
 function clearAuthData(){
-    sessionStorage.removeItem("token");
+    localStorage.removeItem("token");
 }
 function getAuthData(){
-    return sessionStorage.getItem("token");
+    return localStorage.getItem("token");
 }

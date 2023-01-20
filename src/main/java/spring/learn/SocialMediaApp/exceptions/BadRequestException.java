@@ -1,2 +1,12 @@
-package spring.learn.SocialMediaApp.exceptions;public class BadRequestException {
+package spring.learn.SocialMediaApp.exceptions;
+
+public class BadRequestException extends RuntimeException{
+
+    public BadRequestException() {
+        super();
+    }
+
+    public BadRequestException(String message) {
+        super(message);
+    }
 }

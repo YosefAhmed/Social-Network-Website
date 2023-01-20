@@ -112,9 +112,9 @@
                     <input type="text" placeholder="Enter your email" name="email">
                     <label><b>Password</b></label>
                     <input type="password" placeholder="Enter your password" name="password">
-                    <button type="submit" id="loginBtn" onclick="login(email.value, password.value)">Login</button>
+                    <button type="submit" id="loginBtn" onclick="login(email.value, password.value, rememberMe.checked)">Login</button>
                     <label>
-                        <input type="checkbox" checked="checked" name="remember">Remember
+                        <input type="checkbox" checked="checked" name="rememberMe">Remember Me
                     </label>
                 </div>
             </form>
@@ -137,73 +137,6 @@
             </div>
         </form>
     </div>
-    <script >
-        var signupModal = document.getElementById('signupModalId');
-window.onclick = function(event){
-    if(event.target == signupModal){
-        closeRegisterModal();
-    }
-}
-var token = "";
-function login(email, password){
-    const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ "email": email, "password": password })
-    };
-    fetch("/login", requestOptions)
-        .then((res) => {
-            if (res.status == 200) {
-                res.text().then(function(value){
-                    saveAuthData(value);
-                });
-                // window.location.reload();
-            } else {
-                throw Error(res.statusText)
-            }
-        })
-        .catch(console.error)
-    // $.ajax({
-	// 	url: "/authentication/authenticate", 
-	// 	type:'POST', 
-	// 	data: JSON.stringify({ "email": email, "password": password }), 
-	// 	headers: {"Content-Type":"application/json"},
-    //     success: function(result){ 
-    //         token = result;
-    //         alert("success "+token);
-    //         saveAuthData(token);
-    //         $.ajax({
-    //             url: "/home", 
-    //             type:'GET', 
-    //             headers: {"Content-Type":"application/json","Authorization":"Bearer "+token},
-    //             success: function(result){ 
-    //                 alert("success "+result);    
-    //                 // window.location.replace("/home");                
-    //             },
-    //             error: function(result){ alert("error "+result);}
-	// 	});
-    //     },
-    //     error: function(result){ alert("error "+result.statusText);}
-	// 	});
-}
-function register(){
-
-}
-function showRegisterModal(){
-    document.getElementById('signupModalId').style.display='block';
-}
-function closeRegisterModal(){
-    document.getElementById('signupModalId').style.display='none'
-}
-function saveAuthData(data){
-    localStorage.setItem("currentUser", data);
-}
-function clearAuthData(){
-    localStorage.removeItem("token");
-}
-function getAuthData(){
-    return localStorage.getItem("token");
-}
-    </script>
+    <script type="text/javascript" src="js/login.js"></script>
 </body>
 </html>
