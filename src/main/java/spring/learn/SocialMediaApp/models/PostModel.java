@@ -3,10 +3,7 @@ package spring.learn.SocialMediaApp.models;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "posts")
@@ -33,11 +30,11 @@ public class PostModel {
     @JoinTable(name = "postComments",
                 joinColumns = @JoinColumn(name = "postId", referencedColumnName = "id"),
                 inverseJoinColumns = @JoinColumn(name = "commentId", referencedColumnName = "id"))
-    private List<CommentModel> listOfComments;
-    @OneToMany
+    private Set<CommentModel> listOfComments;
+    @ManyToMany
     @JoinTable(name = "postLikes",
             joinColumns = @JoinColumn(name = "postId", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "userId", referencedColumnName = "id"))
-    private List<UserModel> listOfLikes;
+    private Set<UserModel> listOfLikes;
 
 }

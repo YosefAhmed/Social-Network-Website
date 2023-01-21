@@ -8,9 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import spring.learn.SocialMediaApp.exceptions.BadRequestException;
 import spring.learn.SocialMediaApp.models.PostModel;
 import spring.learn.SocialMediaApp.models.dto.AddPostRequest;
+import spring.learn.SocialMediaApp.models.dto.PostInteractionRequest;
 import spring.learn.SocialMediaApp.services.PostService;
-
-import java.util.List;
 
 @Controller
 public class PostController {
@@ -28,8 +27,17 @@ public class PostController {
         }
     }
 
-    public String interactWithPost(long postId){
-        return null;
+    @PostMapping("/interactWithPost")
+    public ResponseEntity<String> interactWithPost(
+            @RequestBody PostInteractionRequest interactionRequest
+            ){
+
+        try {
+            postService.InteractWithPost(interactionRequest);
+            return ResponseEntity.ok("You liked post "+interactionRequest.getPostId());
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
     @GetMapping("/getPosts")

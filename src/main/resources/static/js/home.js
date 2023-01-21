@@ -24,9 +24,9 @@ async function getToken(){
     return await fetch("/authenticated/getToken", window.requestOptions)
 
 }
-function getPostElement(name, content, date, numberOfLikes, numberOfComments){
-    return `
-    <div class="post-modal">
+function getPostElement(postId, name, date, content, liked,numberOfLikes, numberOfComments){
+    return ` 
+    <div class="post-modal" id="${postId}">
         <div class="container">
             <div class="postAccount-panel">
                 <img src="images/manavatar.png" style="width: 10%; border-radius: 50%;">
@@ -42,7 +42,8 @@ function getPostElement(name, content, date, numberOfLikes, numberOfComments){
             <div class="postInteractions-panel">
                 <button id="commentButton" type="submit" style="margin-right: 1%; width: 20%;" >comment</button>
                 <textarea id="commentContent" class="post-textArea" name="commentTxt" placeholder="Write a comment.."></textarea>
-                <button id="likeButton" type="submit" style="margin-left: 2%; width: 25%;" onclick="like(this, this.parentNode.parentNode)">Like</button>
+                <button id="likeButton" type="submit" style= "margin-left: 2%; width: 25%; background-color: white; border: 2px solid rgb(34, 123, 207); color: rgb(34, 123, 207);"
+                onclick="like(this, this.parentNode.parentNode)">${liked}</button>
             </div>
             <small id="numOfComments" style="color: gray;">${numberOfComments}</small>
             <small style="color: gray;"> comments</small>
@@ -73,8 +74,8 @@ function post(postContent) {
     window.location.reload();
     // createPostElement(currentUser.name, postContent, date, numberOfLikes, numberOfComments)
 }
-function createPostElement(name, content, date, numberOfLikes, numberOfComments){
-    let postElement = getPostElement(name, content, date, numberOfLikes, numberOfComments);
+function createPostElement(post){
+    let postElement = getPostElement(post.id,post.name, post.date, post.content, post.liked,post.numOfLikes, post.numOfComments);
     let element = document.createElement("div");
     element.innerHTML = postElement;
     document.getElementById("wallModal").appendChild(element);
@@ -92,15 +93,27 @@ function getPosts(token){
             res.json().then(function(value){
                 posts = value;
                 posts.forEach((postObj)=>{
+                    let listOfLikes = postObj.listOfLikes;
+                    let listOfComments = postObj.listOfComments;
+                    let liked = "Like";
+                    console.log(postObj.postDate);
+                    let date = new Date(postObj.postDate.substring(0,10));
+                    if(listOfLikes.some((user)=>currentUser.id === user.id)){
+                        liked = "Dislike"
+                    }
+                    console.log();
                     createPostElement(
-                        postObj.publisher.name, 
-                        postObj.content, 
-                        postObj.date,
-                        postObj.numberOfLikes,
-                        postObj.numberOfComments)
-                    console.log(postObj);
+                        {
+                            "id":postObj.id,
+                            "name":postObj.publisher.name, 
+                            "date": date.toLocaleDateString()+" "+date.toLocaleTimeString(),
+                            "content":postObj.content,
+                            "liked":liked, 
+                            "numOfLikes":postObj.numberOfLikes,
+                            "numOfComments":postObj.numberOfComments})
+                            // console.log(postObj);
+                        });
                 });
-            });
         } else {
             throw Error(res.statusText)
         }
@@ -108,20 +121,42 @@ function getPosts(token){
     .catch(console.error)
 }
 function like(element, parent) {
+    let postId = parent.parentNode.parentNode.id;
     let numOfLikes = Number(parent.querySelector("#numOfLikes").innerHTML);
+    let interaction = "";
     if (element.innerHTML == "Like") {
-        element.innerHTML = "Liked";
-        element.style.backgroundColor = "white";
-        element.style.border = "2px solid #227bcf";
-        element.style.color = "#227bcf";
-
+        interaction = "LIKE";
+        element.innerHTML = "Dislike";
         numOfLikes++;
     } else {
+        interaction = "DISLIKE";
         element.innerHTML = "Like";
-        element.style.backgroundColor = "#227bcf";
-        element.style.border = "border: 0px";
-        element.style.color = "white";
         numOfLikes--;
     }
+    $.ajax({
+        url: "/interactWithPost",
+        type: "POST",
+        data: JSON.stringify({
+            "postId":postId,
+            "userId": currentUser.id,
+            "numberOfLikes": numOfLikes,
+            "interaction": interaction
+        }),
+        headers: { "Content-Type": "application/json","Authorization": "Bearer "+ token},
+        success: function (result) {
+            console.log(result);
+        },
+        error: function (result) {
+            if (element.innerHTML == "Like") {
+                interaction = "LIKE";
+                element.innerHTML = "Liked";
+                numOfLikes++;
+            } else {
+                interaction = "DISLIKE";
+                element.innerHTML = "Like";
+                numOfLikes--;
+            }
+        },
+    });
     parent.querySelector("#numOfLikes").innerHTML = numOfLikes;
 }
